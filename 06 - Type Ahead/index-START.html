@@ -37,6 +37,7 @@ function numberWithCommas(x) {
 }
 
 function displayMatches() {
+  // this correspond ici à ce qui est tapé dans la barre de recherche 
   const matchArray = findMatches(this.value, cities);
   const html = matchArray.map(place => {
     const regex = new RegExp(this.value, 'gi');
@@ -52,11 +53,12 @@ function displayMatches() {
   suggestions.innerHTML = html;
 };
 
-const searchinput = document.querySelector('.search');
-const suggestions = document.querySelector('.suggestions');
+  const searchinput = document.querySelector('.search');
+  const suggestions = document.querySelector('.suggestions');
 
-searchinput.addEventListener('change', displayMatches);
-searchinput.addEventListener('keyup', displayMatches);
+  searchinput.addEventListener('change', displayMatches);
+  searchinput.addEventListener('keyup', displayMatches);
+
 </script>
 </body>
 </html>
