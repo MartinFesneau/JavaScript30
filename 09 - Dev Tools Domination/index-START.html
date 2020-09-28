@@ -40,7 +40,13 @@
     // counting
 
     // timing
-
+    console.time('fetching data');
+    fetch('https://api.github.com/users/MartinFesneau')
+        .then(data => data.json())
+        .then(data => {
+          console.timeEnd('fetching data');
+          console.log(data);
+        });
   </script>
 </body>
 </html>
