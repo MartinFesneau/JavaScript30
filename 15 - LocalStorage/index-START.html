@@ -23,13 +23,63 @@
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
     </form>
+    <button class="selectall">selectall</button>
   </div>
 
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  const items = JSON.parse(localStorage.getItem("items")) || []; //on recupere le contenu du local storage et on le re transforme en objet 
+  const selectall = document.querySelector(".selectall");
 
+  function addItem(e) {
+    e.preventDefault();
+    const text = (this.querySelector("[name=item]")).value;
+    const item = {
+      text, //text tout seul équivaut à text: text . quand la clé et la valeur ont le même nom
+      done: false
+    };
+    items.push(item);
+    populateList(items, itemsList);
+    localStorage.setItem("items", JSON.stringify(items)); //obligé de le transformer en string sinon le navigateur fait .toString() dessus et cela renvoi jsut [Object Object]
+    this.reset();
+  }
+
+  function populateList(plates = [], platesList) {
+    platesList.innerHTML = plates.map((plate, i) => {
+      return `
+      <li>
+        <input type="checkbox" data-index="${i}" id="item${i}" ${plate.done ? "checked" : ""}/>
+        <label for="item${i}">${plate.text}</label>
+      </li>
+      `;
+    }).join('');
+  }
+
+  function toggleDone(e) {
+    if (!e.target.matches("input")) return; // on skip si c'est pas un input
+    const element = e.target;
+    const index = element.dataset.index;
+    items[index].done = !items[index].done;
+    localStorage.setItem("items", JSON.stringify(items));
+    populateList(items, itemsList);
+  }
+
+  function selectallCheckboxes() {
+    items.forEach(item => {
+      item.done = !item.done
+    })
+    selectall.innerHTML === "selectall" ? selectall.innerHTML="clear" : selectall.innerHTML="selectall";
+    localStorage.setItem("items", JSON.stringify(items));
+    populateList(items, itemsList);
+  }
+
+
+  addItems.addEventListener("submit", addItem);
+  itemsList.addEventListener("click", toggleDone);
+  populateList(items, itemsList);
+  selectall.addEventListener("click", selectallCheckboxes);
+  
 </script>
 
 
